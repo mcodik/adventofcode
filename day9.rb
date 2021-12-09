@@ -31,20 +31,24 @@ def find_low_points(input)
 end
 
 def recur_basin_size(x, y, input, visited)
+    if visited[x][y]
+        return 0
+    end
     visited[x][y] = true
+    size = 1
     #puts visited.inspect
     neighbors(input, x, y).each do |i, j|
         next if visited[i][j]
         neighbor = input[i][j]
         next if neighbor == 9
-        recur_basin_size(i, j, input, visited) 
+        size += recur_basin_size(i, j, input, visited)
     end
+    size
 end
 
 def basin_size(x, y, input)
     visited = Array.new(input.length) { Array.new(input[0].length, false) }
     recur_basin_size(x, y, input, visited)
-    visited.sum { |row| row.count(&:itself) }
 end
 
 def parta(input)
