@@ -40,7 +40,7 @@ end
 #compact_simulate([3,4,3,1,2], 80)
 
 def run_input(days)
-    input = File.readlines("day6.txt").map(&:strip)[0].split(",").map(&:to_i)
+    input = File.readlines("inputs/day6.txt").map(&:strip)[0].split(",").map(&:to_i)
     puts compact_simulate(input, days)
 end
 

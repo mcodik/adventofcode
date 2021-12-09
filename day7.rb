@@ -1,4 +1,4 @@
-input = File.readlines("day7.txt")[0].strip.split(",").map(&:to_i)
+input = File.readlines("inputs/day7.txt")[0].strip.split(",").map(&:to_i)
 
 def arith_cost(a, b)
     d = (b - a).abs

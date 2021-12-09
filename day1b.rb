@@ -22,4 +22,4 @@ end
 #puts windowed_increases([199,200,208210,200,207,240,269,260,263])
 # -> 5
 
-puts windowed_increases(File.readlines("day1.txt"))
+puts windowed_increases(File.readlines("inputs/day1.txt"))

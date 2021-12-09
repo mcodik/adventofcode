@@ -26,7 +26,7 @@ def interpolate(pt1, pt2)
 end
 
 def count_intersections()
-    input = File.readlines("day5.txt").map(&:strip)
+    input = File.readlines("inputs/day5.txt").map(&:strip)
     h = Hash.new
     input.each do |line|
         endpoints = line.split(" -> ")

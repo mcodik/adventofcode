@@ -1,4 +1,4 @@
-input = File.readlines("day8.txt").map(&:strip).map do |line|
+input = File.readlines("inputs/day8.txt").map(&:strip).map do |line|
     signals, outputs = line.split(" | ")
     [ signals.split(" "), outputs.split(" ") ]
 end

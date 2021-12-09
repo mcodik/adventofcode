@@ -31,7 +31,7 @@ class Submarine
 end
 
 sub = Submarine.new
-File.readlines("day2.txt").each do |line|
+File.readlines("inputs/day2.txt").each do |line|
     op, num = line.match(/(\w+) (\d+)/i).captures
     num = num.to_i
     case op

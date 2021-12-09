@@ -1,4 +1,4 @@
-PUZZLE_INPUT = File.readlines("day9.txt").map(&:strip).map { |line| line.split("").map(&:to_i) }
+PUZZLE_INPUT = File.readlines("inputs/day9.txt").map(&:strip).map { |line| line.split("").map(&:to_i) }
 
 def neighbors(input, i, j)
     Enumerator.new do |y|

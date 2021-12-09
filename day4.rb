@@ -77,7 +77,7 @@ def part_b(draws, boards)
     last_winner
 end
 
-input = File.readlines("day4.txt").map(&:strip)
+input = File.readlines("inputs/day4.txt").map(&:strip)
 draws = input.shift.split(",").map(&:to_i)
 boards = []
 while input.length > 0

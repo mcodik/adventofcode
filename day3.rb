@@ -85,7 +85,7 @@ def find_life_support_rating(input)
 end
 
 def compute_part_b()
-    input = File.readlines("day3.txt").map { |x| x.strip }
+    input = File.readlines("inputs/day3.txt").map { |x| x.strip }
     #input = ["00100", "11110", "10110", "10111", "10101",
     #         "01111", "00111","11100", "10000", "11001",
     #         "00010", "01010"]

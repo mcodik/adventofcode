@@ -1,6 +1,6 @@
 increases = 0
 last = -1
-File.readlines("day1.txt").each do |line|
+File.readlines("inputs/day1.txt").each do |line|
     val = line.to_i
     if last > 0 && val > last
         increases += 1
