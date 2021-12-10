@@ -38,16 +38,8 @@ def part_a(input)
         begin
             parse(line)
         rescue MismatchedBracesException => error
-            case error.mismatched
-            when ")"
-                score += 3
-            when "]"
-                score += 57
-            when "}"
-                score += 1197
-            when ">"
-                score += 25137
-            end
+            points = {")" => 3, "]" => 57, "}" => 1197, ">" => 25137 }
+            score += points[error.mismatched]
         end
     end
     score
