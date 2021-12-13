@@ -1,18 +1,9 @@
-
 def parse(filename)
-    result = {}
+    result = Hash.new { |h,k| h[k] = [] }
     File.readlines(filename).each do |line|
         from, to = line.strip.split("-")
-        if result.key? from 
-            result[from] << to 
-        else
-            result[from] = [to]
-        end
-        if result.key? to 
-            result[to] << from 
-        else
-            result[to] = [from]
-        end
+        result[from] << to 
+        result[to] << from 
     end
     result
 end
@@ -52,8 +43,6 @@ def step(input, current, partial_path, did_double_stop)
     end
     paths_via_current
 end
-
-
 
 #puts part_a(parse("inputs/day12_test_small.txt")).length
 #puts part_a(parse("inputs/day12.txt")).length
