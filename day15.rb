@@ -100,4 +100,54 @@ def part_a(input)
 end
 
 #puts part_a(parse("inputs/day15_test.txt"))
-puts part_a(parse("inputs/day15.txt"))
+#puts part_a(parse("inputs/day15.txt"))
+
+def wrap(x, i)
+    r = x + i
+    if r > 9
+        r-9
+    else
+        r
+    end
+end
+
+def tile(input)
+    tiled_rows = []
+    input.each do |input_row|
+        tiled_row = input_row.clone
+        1.upto(4) do |i|
+            tiled_row.concat input_row.map { |x| wrap(x,i) }
+        end
+        tiled_rows << tiled_row
+    end
+    tiled = tiled_rows.clone
+    1.upto(4) do |i|
+        tiled_rows.each do |tiled_row|
+            tiled.append tiled_row.map { |x| wrap(x,i) }
+        end
+    end
+    tiled
+end
+
+def part_b(input)
+    tiled = tile(input)
+    shortest_path = djikstra_search(tiled)
+    path_cost(shortest_path, tiled)
+end
+
+# puts part_b(parse("inputs/day15_test.txt"))
+puts part_b(parse("inputs/day15.txt"))
+
+
+# tiled = tile(parse("inputs/day15_test.txt"))
+# expected = parse("inputs/day15_test_tiled.txt")
+
+# puts tiled == expected
+
+# expected.each_with_index do |row, i|
+#     if row != tiled[i]
+#         puts "mismatch #{i}"
+#         puts row.inspect
+#         puts tiled[i].inspect
+#     end
+# end
