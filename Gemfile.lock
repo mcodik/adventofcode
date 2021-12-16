@@ -4,6 +4,7 @@ GEM
     ast (2.4.2)
     backport (1.2.0)
     benchmark (0.2.0)
+    d_heap (0.7.0)
     diff-lcs (1.4.4)
     e2mmap (0.1.0)
     jaro_winkler (1.5.4)
@@ -16,25 +17,13 @@ GEM
     parallel (1.21.0)
     parser (3.0.3.1)
       ast (~> 2.4.1)
+    pqueue (2.1.0)
     racc (1.6.0)
     rainbow (3.0.0)
     regexp_parser (2.1.1)
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.2.5)
-    rspec (3.10.0)
-      rspec-core (~> 3.10.0)
-      rspec-expectations (~> 3.10.0)
-      rspec-mocks (~> 3.10.0)
-    rspec-core (3.10.1)
-      rspec-support (~> 3.10.0)
-    rspec-expectations (3.10.1)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.10.0)
-    rspec-mocks (3.10.2)
-      diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.10.0)
-    rspec-support (3.10.3)
     rubocop (1.23.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
@@ -73,7 +62,8 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  rspec
+  d_heap
+  pqueue
   solargraph
 
 BUNDLED WITH

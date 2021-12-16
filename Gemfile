@@ -1,3 +1,4 @@
 source 'https://rubygems.org'
 gem 'solargraph'
-gem 'rspec'
+gem 'pqueue'
+gem 'd_heap'
