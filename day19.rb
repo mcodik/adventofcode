@@ -2,12 +2,18 @@ require 'matrix'
 
 
 class Scanner
-    attr_reader :i, :beacons, :translation, :rotation
-    def initialize(i, beacons)
-        @i = i
+    attr_reader :index, :beacons, :translation, :rotation
+    def initialize(index, beacons)
+        @index = index
         @beacons = beacons
         @rotation = 0
         @translation = Vector.zero(3)
+    end
+
+    def clone
+        s = Scanner.new(@index, @beacons)
+        s.rotate(@rotation).translate(@translation)
+        s
     end
 
     def rotate(i)
@@ -28,10 +34,16 @@ class Scanner
     end
 
     def normalize(translation, rotation)
+        puts "scanner #{@index} found at #{-translation} with rotation #{rotation}"
         @beacons = beacons.map do |v|
             b = apply_rotation(rotation, v)
-            b + translation
+            r = b - translation
+            # puts "normalizing #{v} -> #{r}"
+            r
         end
+        #puts @beacons.length
+        @translation = Vector.zero(3)
+        @rotation = 0
     end
 end
 
@@ -40,28 +52,21 @@ def apply_rotation(i, v)
 end
 
 def parse(filename)
-    lines = File.readlines(filename).map(&:strip)
+    file = File.read(filename)
+    chunks = file.split("\n\n")
     scanners = []
     index = 0
-    while lines.length > 0
-        index += 1
+    chunks.each do |c|
+        lines = c.split("\n")
         lines.shift # header
-        beacon = lines.shift
         beacons = []
-        while beacon != "" && !beacon.nil?
+        lines.each do |beacon|
             beacons << Vector.elements(beacon.split(",").map { |c| c.to_i })
-            beacon = lines.shift
         end
         scanners << Scanner.new(index, beacons)
-        lines.shift
+        index += 1
     end
     scanners
-end
-
-def dump(m)
-    m.each do |row|
-        puts "[" + row.map { |r| r.floor.to_s }.join(" ") + "]"
-    end
 end
 
 ROTATIONS = [
@@ -98,6 +103,7 @@ ROTATIONS = [
 ]
 
 def match_with_vectors(s0, s1)
+    s0 = s0.clone
     s0.beacons.each do |b0|
         s0.translate(-b0)
         (0..ROTATIONS.length-1).each do |r|
@@ -106,7 +112,7 @@ def match_with_vectors(s0, s1)
                 s1.translate(-b1)
                 common_beacons = s0.transformed_beacons & s1.transformed_beacons
                 if common_beacons.length >= 11
-                    s0.translate(Vector[0,0,0])
+                    scanner_loc = b0 - apply_rotation(r, b1)
                     s1.normalize(-scanner_loc, r)
                     return s1
                 end
@@ -118,13 +124,25 @@ end
 
 def normalize_all(scanners)
     normalized = [scanners.shift]
+    beacons = {}
+    normalized[0].beacons.each do |b|
+        beacons[b] = true
+    end
     while scanners.length > 0
         made_progress = false
         normalized.clone.each do |n|
             scanners.clone.each do |s|
                 s_prime = match_with_vectors(n, s)
                 if !s_prime.nil?
+                    puts "found overlap between #{n.index} #{s.index}"
                     normalized << s_prime
+                    old_beacons = beacons.keys.length
+                    s_prime.beacons.each do |b|
+                        beacons[b] = true
+                    end
+                    puts "identified #{beacons.keys.length - old_beacons} new beacons. #{beacons.keys.length} total"
+                    # beacons.keys.sort_by { |v| v[0] }.each { |b| puts b.inspect }
+                    puts "-----"
                     scanners.delete(s)
                     made_progress = true
                 end
@@ -132,12 +150,6 @@ def normalize_all(scanners)
         end
         if !made_progress
             raise "stuck?"
-        end
-    end
-    beacons = {}
-    normalized.each do |n|
-        n.beacons.each do |b|
-            beacons[b] = true
         end
     end
     beacons.keys
@@ -149,4 +161,7 @@ def part_a(filename)
     beacons.length
 end
 
-puts part_a("inputs/day19_test.txt")
+if __FILE__ == $0 
+    # puts part_a("inputs/day19_test.txt")
+    puts part_a("inputs/day19.txt")
+end
