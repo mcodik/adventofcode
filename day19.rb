@@ -21,10 +21,16 @@ class Scanner
     end
 
     def transformed_beacons
-        rotation_fn = ROTATIONS[@rotation]
         beacons.map do |b|
             v = b + @translation
             apply_rotation(@rotation, v)
+        end
+    end
+
+    def normalize(translation, rotation)
+        @beacons = beacons.map do |v|
+            b = apply_rotation(rotation, v)
+            b + translation
         end
     end
 end
@@ -91,7 +97,7 @@ ROTATIONS = [
         -> ((x,y,z)) { [y, -z, -x] }
 ]
 
-def match_with_vectors_2(s0, s1)
+def match_with_vectors(s0, s1)
     s0.beacons.each do |b0|
         s0.translate(-b0)
         (0..ROTATIONS.length-1).each do |r|
@@ -99,15 +105,48 @@ def match_with_vectors_2(s0, s1)
                 s1.rotate(r)
                 s1.translate(-b1)
                 common_beacons = s0.transformed_beacons & s1.transformed_beacons
-                # puts common_beacons.inspect if r == 6
                 if common_beacons.length >= 11
                     s0.translate(Vector[0,0,0])
-                    scanner_loc = b0 - apply_rotation(r, b1)
-                    s1.translate(-scanner_loc)
-                    return [s1, scanner_loc]
+                    s1.normalize(-scanner_loc, r)
+                    return s1
                 end
             end
         end
     end
     nil
 end
+
+def normalize_all(scanners)
+    normalized = [scanners.shift]
+    while scanners.length > 0
+        made_progress = false
+        normalized.clone.each do |n|
+            scanners.clone.each do |s|
+                s_prime = match_with_vectors(n, s)
+                if !s_prime.nil?
+                    normalized << s_prime
+                    scanners.delete(s)
+                    made_progress = true
+                end
+            end
+        end
+        if !made_progress
+            raise "stuck?"
+        end
+    end
+    beacons = {}
+    normalized.each do |n|
+        n.beacons.each do |b|
+            beacons[b] = true
+        end
+    end
+    beacons.keys
+end
+
+def part_a(filename)
+    scanners = parse(filename)
+    beacons = normalize_all(scanners)
+    beacons.length
+end
+
+puts part_a("inputs/day19_test.txt")
