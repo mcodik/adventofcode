@@ -128,13 +128,16 @@ def normalize_all(scanners)
     normalized[0].beacons.each do |b|
         beacons[b] = true
     end
+    checked = {}
     while scanners.length > 0
         made_progress = false
         normalized.clone.each do |n|
             scanners.clone.each do |s|
+                next if checked[[n.index, s.index]]
+                checked[[n.index, s.index]] = true
                 s_prime = match_with_vectors(n, s)
                 if !s_prime.nil?
-                    puts "found overlap between #{n.index} #{s.index}"
+                    #puts "found overlap between #{n.index} #{s.index}"
                     normalized << s_prime
                     old_beacons = beacons.keys.length
                     s_prime.beacons.each do |b|
@@ -161,7 +164,27 @@ def part_a(filename)
     beacons.length
 end
 
+def part_b()
+    vectors = File.readlines("day19.out")
+        .keep_if { |l| l.start_with?("scanner") }
+        .map() { |l| l.match(/found at (.*) with/).captures }
+        .flatten
+        .map() { |l| eval(l) }
+    max_dist = 0
+    vectors.each do |v1|
+        vectors.each do |v2|
+            dist = (v1[0]-v2[0]).abs + (v1[1]-v2[1]).abs + (v1[2]-v2[2]).abs
+            if dist > max_dist
+                max_dist = dist
+            end
+        end
+    end
+    max_dist
+end
+            
+
 if __FILE__ == $0 
     # puts part_a("inputs/day19_test.txt")
-    puts part_a("inputs/day19.txt")
+    # puts part_a("inputs/day19.txt")
+    puts part_b().inspect
 end
