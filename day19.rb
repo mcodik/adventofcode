@@ -165,7 +165,7 @@ def part_a(filename)
 end
 
 def part_b()
-    vectors = File.readlines("day19.out")
+    vectors = File.readlines("inputs/day19.out")
         .keep_if { |l| l.start_with?("scanner") }
         .map() { |l| l.match(/found at (.*) with/).captures }
         .flatten
