@@ -65,7 +65,7 @@ class Cave
         j = OUTER_INDEX[room_index]
         while j < @outer.length-1
             break unless @outer[j+1].nil?
-            possible << RoomToOuter.new(amphipod, j+1, room_index, amphipod_index) unless OUTER_INDEX.include?(j-1)
+            possible << RoomToOuter.new(amphipod, j+1, room_index, amphipod_index) unless OUTER_INDEX.include?(j+1)
             j += 1
         end
         possible
@@ -293,8 +293,8 @@ def search(cave)
         current = Cave.from_key current_key
         heap.pop
         steps += 1
-        puts "step = #{steps}, heap = #{heap.size}, positions = #{actual_costs.size}, new_keys = #{new_keys} cost = #{current_heuristic_cost}" if steps % 1000 == 0
-        puts current.dump if steps % 1000 == 0
+        puts "step = #{steps}, heap = #{heap.size}, positions = #{actual_costs.size}, new_keys = #{new_keys} cost = #{current_heuristic_cost}" if steps % 10000 == 0
+        # puts current.dump if steps % 1000 == 0
         moves = current.possible_moves
         moves.each do |move|
             updated = move.apply_move current
@@ -348,4 +348,5 @@ PUZZLE_PART_B = Cave.new([
 if __FILE__ == $0
     # ROOM_LENGTH = 2
     puts search(PUZZLE_PART_B)
+    # PUZZLE_PART_B.dump
 end

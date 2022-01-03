@@ -163,25 +163,66 @@ class Day23Test < Test::Unit::TestCase
         assert_equal 13495, cost
     end
 
+    PART_B_SOLUTION = [
+        RoomToOuter.new(:A, 10, 2, 3),
+        RoomToOuter.new(:B, 9, 2, 2),
+        RoomToOuter.new(:A, 0, 2, 1),
+        RoomToOuter.new(:D, 1, 1, 3),
+        RoomToOuter.new(:D, 3, 2, 0),
+        RoomToOuter.new(:C, 5, 1, 2),
+        OuterToRoom.new(:C, 5, 2, 0),
+        RoomToOuter.new(:B, 7, 1, 1),
+        RoomToOuter.new(:C, 5, 1, 0),
+        OuterToRoom.new(:C, 5, 2, 1),
+        OuterToRoom.new(:B, 7, 1, 0),
+        RoomToOuter.new(:B, 5, 3, 3),
+        OuterToRoom.new(:B, 5, 1, 1),
+        OuterToRoom.new(:B, 9, 1, 2),
+        RoomToOuter.new(:A, 9, 3, 2),
+        RoomToOuter.new(:C, 7, 3, 1),
+        OuterToRoom.new(:C, 7, 2, 2),
+        RoomToOuter.new(:B, 7, 3, 0),
+        OuterToRoom.new(:B, 7, 1, 3),
+        OuterToRoom.new(:D, 3, 3, 0),
+        OuterToRoom.new(:D, 1, 3, 1),
+        RoomToOuter.new(:A, 1, 0, 3),
+        RoomToOuter.new(:D, 5, 0, 2),
+        OuterToRoom.new(:D, 5, 3, 2),
+        RoomToOuter.new(:D, 5, 0, 1),
+        OuterToRoom.new(:D, 5, 3, 3),
+        RoomToOuter.new(:C, 5, 0, 0),
+        OuterToRoom.new(:C, 5, 2, 3),
+        OuterToRoom.new(:A, 9, 0, 0),
+        OuterToRoom.new(:A, 10, 0, 1),
+        OuterToRoom.new(:A, 1, 0, 2),
+        OuterToRoom.new(:A, 0, 0, 3)]
+
     def test_part_b_manual_solve
         c = PUZZLE_PART_B.clone
         cost = 0
-        [
-            RoomToOuter.new(:D, 10, 1, 3),
-            RoomToOuter.new(:C, 0, 1, 2),
-            RoomToOuter.new(:B, 3, 1, 1),
-            RoomToOuter.new(:C, 1, 1, 0),
-            OuterToRoom.new(:B, 3, 1, 0),
-            RoomToOuter.new(:B, 7, 3, 3),
-            OuterToRoom.new(:B, 7, 1, 1),
-        ].each do |mv|
+        
+        PART_B_SOLUTION.each do |mv|
             c.dump 
             c = mv.apply_move c
             cost += mv.cost
         end
         c.dump
         assert_equal true, c.complete?
-        assert_equal 13495, cost
+        assert_equal 53767, cost
+    end
+
+    def test_missing_move
+        c = PUZZLE_PART_B.clone
+        PART_B_SOLUTION.each do |mv|
+            possible = c.possible_moves
+            if !possible.include?(mv)
+                c.dump
+                puts mv.inspect
+                puts possible.filter { |m| m.amphipod == :A && m.room_index == 2 }.sort_by { |m| m.outer_index }.inspect
+                flunk
+            end
+            c = mv.apply_move c
+        end
     end
 
     def test_expected_cost
