@@ -41,6 +41,8 @@ class Monad
     end
 end
 
+# https://docs.google.com/spreadsheets/d/1BaQUjG-2Ziy7vDTMEQVPCrJl2k670UGXIm5bWbavgC4/edit#gid=1625840373
+
 m = Monad.new
 # input = [9,1,3,9,8,2,9,9,6,9,7,9,9,6]
 input = [4,1,1,7,1,1,8,3,1,4,1,2,9,1]
