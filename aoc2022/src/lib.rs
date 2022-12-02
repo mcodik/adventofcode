@@ -1,5 +1,5 @@
 
-pub fn day1(contents:String, top:usize) -> i32 {
+pub fn day1(contents:&String, top:usize) -> i32 {
     let mut curr = 0;
     let mut v: Vec<i32> = Vec::new();
 
@@ -33,13 +33,19 @@ mod tests {
 
     #[test]
     fn simple() {
-        assert_eq!(6, day1("1\n2\n3\n".to_string(), 1));
-        assert_eq!(6, day1("1\n2\n3\n\n".to_string(), 1));
+        assert_eq!(6, day1(&"1\n2\n3\n".to_string(), 1));
+        assert_eq!(6, day1(&"1\n2\n3\n\n".to_string(), 1));
     }
 
     #[test]
     fn sections() {
-        assert_eq!(6, day1("1\n2\n3\n\n1\n2\n".to_string(), 1));
-        assert_eq!(8, day1("1\n2\n3\n\n1\n7\n".to_string(), 1));
+        assert_eq!(6, day1(&"1\n2\n3\n\n1\n2\n".to_string(), 1));
+        assert_eq!(8, day1(&"1\n2\n3\n\n1\n7\n".to_string(), 1));
+    }
+
+    #[test]
+    fn both_sections() {
+        assert_eq!(9, day1(&"1\n2\n3\n\n1\n2\n".to_string(), 2));
+        assert_eq!(14, day1(&"1\n2\n3\n\n1\n7\n".to_string(), 2));
     }
 }
