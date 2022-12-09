@@ -32,9 +32,9 @@ fn main() {
 
 fn run_day7() {
     let contents = fs::read_to_string("inputs/day7.txt").expect("should open file");
-    let result = day6::run_part_1(&contents);
+    let result = day7::run_part_1(&contents);
     println!("done! {result}");
-    let result = day6::run_part_2(&contents);
+    let result = day7::run_part_2(&contents);
     println!("done! {result}");
 }
 
