@@ -12,30 +12,64 @@ pub mod day7;
 pub mod day8;
 pub mod day9;
 pub mod day10;
+pub mod day11;
+// pub mod day12;
+// pub mod day13;
+// pub mod day14;
+// pub mod day15;
+// pub mod day16;
+// pub mod day17;
+// pub mod day18;
+// pub mod day19;
+// pub mod day20;
+// pub mod day21;
+// pub mod day22;
+// pub mod day23;
+// pub mod day24;
+// pub mod day25;
 
 fn main() {
     let args : Vec<String> = env::args().collect();
     let name = args.get(1);
-
-    if name.is_none() {
-        run_day10();
-    } else {
-        let day = name.expect("impossible");
-        match day.as_str() {
-        "day1" => run_day1(),
-        "day2" => run_day2(),
-        "day3" => run_day3(),
-        "day4" => run_day4(),
-        "day5" => run_day5(),
-        "day6" => run_day6(),
-        "day7" => run_day7(),
-        "day8" => run_day8(),
-        "day9" => run_day9(),
-        _ => panic!("not a day"),
-        }
+    let default = "day11".to_string();
+    let day = name.unwrap_or(&default);
+    match day.as_str() {
+    "day1" => run_day1(),
+    "day2" => run_day2(),
+    "day3" => run_day3(),
+    "day4" => run_day4(),
+    "day5" => run_day5(),
+    "day6" => run_day6(),
+    "day7" => run_day7(),
+    "day8" => run_day8(),
+    "day9" => run_day9(),
+    "day10" => run_day10(),
+    "day11" => run_day11(),
+    // "day12" => run_day12(),
+    // "day13" => run_day13(),
+    // "day14" => run_day14(),
+    // "day15" => run_day15(),
+    // "day16" => run_day16(),
+    // "day17" => run_day17(),
+    // "day18" => run_day18(),
+    // "day19" => run_day19(),
+    // "day20" => run_day20(),
+    // "day21" => run_day21(),
+    // "day22" => run_day22(),
+    // "day23" => run_day23(),
+    // "day24" => run_day24(),
+    // "day25" => run_day25(),
+    _ => panic!("not a day"),
     }
 }
 
+
+fn run_day11() {
+    let result = day11::run_part_1();
+    println!("done! {result}");
+    let result = day11::run_part_2();
+    println!("done! {result}");
+}
 
 fn run_day10() {
     let contents = fs::read_to_string("inputs/day10.txt").expect("should open file");

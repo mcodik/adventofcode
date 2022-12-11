@@ -1,0 +1,23 @@
+
+pub fn run_part_1(contents:&String) -> i32 {
+ 0
+}
+
+pub fn run_part_2(contents:&String) -> i32 {
+  0  
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part_1() {
+        assert_eq!(0, run_part_1(&"1\n2\n3\n".to_string()));
+    }
+
+    #[test]
+    fn test_part_2() {
+        assert_eq!(0, run_part_2(&"1\n2\n3\n".to_string()));
+    }
+}
