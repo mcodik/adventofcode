@@ -120,23 +120,23 @@ pub fn run_part_2(contents:&String) -> usize {
     visited.len() 
 }
 
-fn dump(knots:&Vec<(i32, i32)>) {
-    let mut m = HashMap::new();
-    let dot = &'.'.to_string();
-    for (i, v) in knots.iter().rev().enumerate() {
-        let c = char::from_digit(i as u32, 10).unwrap().to_string();
-        m.insert(v, c);
-    }
-    for i in 0..6 {
-        let mut line = vec![];
-        for j in 0..7 {
-            let n = (i, j);
-            line.push(m.get(&n).unwrap_or(dot));
-        }
-        println!("{:?}", line);
-    }
-    println!("====");
-}
+// fn dump(knots:&Vec<(i32, i32)>) {
+//     let mut m = HashMap::new();
+//     let dot = &'.'.to_string();
+//     for (i, v) in knots.iter().rev().enumerate() {
+//         let c = char::from_digit(i as u32, 10).unwrap().to_string();
+//         m.insert(v, c);
+//     }
+//     for i in 0..6 {
+//         let mut line = vec![];
+//         for j in 0..7 {
+//             let n = (i, j);
+//             line.push(m.get(&n).unwrap_or(dot));
+//         }
+//         println!("{:?}", line);
+//     }
+//     println!("====");
+// }
 
 fn parse(contents:&String) -> Vec<(Direction, i32)> {
     let mut ops = vec![];
