@@ -107,7 +107,7 @@ pub fn run_part_2(contents:&String) -> i32 {
     let mut min = usize::MAX;
     for (i, row) in map.iter().enumerate() {
         for (j, c) in row.iter().enumerate() {
-            if map[i][j] == 'a' {
+            if *c == 'a' {
                 if let Some(dist) = shortest_path(&map, (i,j)) {
                     if dist < min {
                         min = dist;
