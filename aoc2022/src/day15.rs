@@ -42,10 +42,15 @@ fn solve_part_1(input:&[((i32,i32),(i32,i32))], row:i32) -> i32 {
         let x_dist = (beacon.0 - sensor.0).abs();
         let y_dist = (beacon.1 - sensor.1).abs();
         let radius = x_dist + y_dist;
+        if radius == 0 {
+            continue;
+        }
         if sensor.1 + radius >= row && sensor.1 - radius <= row {
             let row_dy = (row - sensor.1).abs();
             let row_radius = (radius - row_dy).abs();
-            ranges.push((sensor.0 - row_radius, sensor.0 + row_radius));
+            let beacon_start_offset = if row == beacon.1 && beacon.0 > sensor.0 { 1 } else { 0 };
+            let beacon_end_offset = if row == beacon.1 && beacon.0 < sensor.0 { -1 } else { 0 };
+            ranges.push((sensor.0 - row_radius + beacon_start_offset, sensor.0 + row_radius + beacon_end_offset));
         }
     }
     if ranges.len() == 0 {
