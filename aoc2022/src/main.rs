@@ -15,7 +15,7 @@ pub mod day10;
 pub mod day11;
 pub mod day12;
 pub mod day13;
-// pub mod day14;
+pub mod day14;
 // pub mod day15;
 // pub mod day16;
 // pub mod day17;
@@ -31,7 +31,7 @@ pub mod day13;
 fn main() {
     let args : Vec<String> = env::args().collect();
     let name = args.get(1);
-    let default = "day13".to_string();
+    let default = "day14".to_string();
     let day = name.unwrap_or(&default);
     match day.as_str() {
     "day1" => run_day1(),
@@ -47,7 +47,7 @@ fn main() {
     "day11" => run_day11(),
     "day12" => run_day12(),
     "day13" => run_day13(),
-    // "day14" => run_day14(),
+    "day14" => run_day14(),
     // "day15" => run_day15(),
     // "day16" => run_day16(),
     // "day17" => run_day17(),
@@ -61,6 +61,14 @@ fn main() {
     // "day25" => run_day25(),
     _ => panic!("not a day"),
     }
+}
+
+fn run_day14() {
+    let contents = fs::read_to_string("inputs/day14.txt").expect("should open file");
+    let result = day14::run_part_1(&contents);
+    println!("done! {result}");
+    let result = day14::run_part_2(&contents);
+    println!("done! {result}");
 }
 
 fn run_day13() {
