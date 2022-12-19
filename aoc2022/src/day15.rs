@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 const INPUT :[((i32,i32),(i32,i32));31]= 
 [((1518415, 2163633), (1111304, 1535696)),
 ((2474609, 3598166), (2691247, 4007257)),
@@ -37,6 +39,15 @@ pub fn run_part_1() -> i32 {
 }
 
 fn solve_part_1(input:&[((i32,i32),(i32,i32))], row:i32) -> i32 {
+    let coalesed = impossible_ranges(input, row, None);
+    let mut sum = 0;
+    for range in coalesed {
+        sum += range.1 - range.0 + 1;
+    }
+    sum
+}
+
+fn impossible_ranges(input:&[((i32,i32),(i32,i32))], row:i32, bound:Option<i32>) -> Vec<(i32, i32)> {
     let mut ranges = vec![];
     for (sensor, beacon) in input {
         let x_dist = (beacon.0 - sensor.0).abs();
@@ -54,16 +65,14 @@ fn solve_part_1(input:&[((i32,i32),(i32,i32))], row:i32) -> i32 {
         }
     }
     if ranges.len() == 0 {
-        return 0;
+        return ranges;
     }
-
+    if let Some(b) = bound {
+        ranges = ranges.into_iter().filter(|r| (r.1 >= 0 && r.1 <= b) || (r.0 <= b && r.1 >= b)).collect();
+    }
     ranges.sort_by_key(|x| x.0);
     let coalesed = coalesce(ranges);
-    let mut sum = 0;
-    for range in coalesed {
-        sum += range.1 - range.0 + 1;
-    }
-    sum
+    return coalesed;
 }
 
 fn coalesce(ranges:Vec<(i32,i32)>) -> Vec<(i32,i32)> {
@@ -86,8 +95,62 @@ fn coalesce(ranges:Vec<(i32,i32)>) -> Vec<(i32,i32)> {
 }
 
 pub fn run_part_2() -> i32 {
-    0  
+    solve_part_2(&INPUT, 4000000)
 }
+
+fn solve_part_2(input:&[((i32,i32),(i32,i32))], bound:i32) -> i32 {
+    let (x, y) = find_beacon(input, bound).unwrap();
+    (x*4000000) + y
+}
+
+fn find_beacon(input:&[((i32,i32),(i32,i32))], bound:i32) -> Option<(i32, i32)> {
+    let mut beacons = HashSet::new();
+    for (_, beacon) in input {
+        beacons.insert(beacon);
+    }
+
+    for row in 1..bound+1 {
+        if row % 10000 == 9999 {
+            println!("row: {} of {}", row, bound);
+        }
+        let ranges = impossible_ranges(input, row, Some(bound));
+        if ranges.len() > 0 {
+            let f = ranges[0];
+            if f.0 <= 0 && f.1 >= bound {
+                continue;
+            }
+            let possibilities = negate(ranges, bound);
+            for possibility_range in possibilities {
+                for i in possibility_range.0..possibility_range.1+1 {
+                    let possibility = (i, row);
+                    if !beacons.contains(&possibility) {
+                        return Some(possibility);
+                    }
+    
+                }
+            }
+        }
+    }
+
+    None
+}
+
+fn negate(ranges:Vec<(i32, i32)>, bound:i32) -> Vec<(i32, i32)> {
+    let mut results = vec![];
+    if ranges[0].0 > 0 {
+        results.push((0, ranges[0].0-1));
+    }
+    for i in 0..ranges.len()-1 {
+        let end = ranges[i+1].0-1;
+        if end >= bound {
+            results.push((ranges[i].1+1, bound));
+            break;
+        }
+        results.push((ranges[i].1+1, end));
+    }
+    results
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -199,7 +262,7 @@ mod tests {
 
     #[test]
     fn test_part_2() {
-        assert_eq!(0, run_part_2());
+        assert_eq!(Some((14,11)), find_beacon(&TEST, 20));
     }
 
     #[test]
