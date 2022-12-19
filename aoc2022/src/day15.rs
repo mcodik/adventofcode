@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-const INPUT :[((i32,i32),(i32,i32));31]= 
+const INPUT :[((i64,i64),(i64,i64));31]= 
 [((1518415, 2163633), (1111304, 1535696)),
 ((2474609, 3598166), (2691247, 4007257)),
 ((426959, 473371), (-529106, 1145419)),
@@ -34,11 +34,11 @@ const INPUT :[((i32,i32),(i32,i32));31]=
 ((1271911, 1529880), (1111304, 1535696))];
 
 
-pub fn run_part_1() -> i32 {
+pub fn run_part_1() -> i64 {
  solve_part_1(&INPUT, 2000000)
 }
 
-fn solve_part_1(input:&[((i32,i32),(i32,i32))], row:i32) -> i32 {
+fn solve_part_1(input:&[((i64,i64),(i64,i64))], row:i64) -> i64 {
     let coalesed = impossible_ranges(input, row, None);
     let mut sum = 0;
     for range in coalesed {
@@ -47,7 +47,7 @@ fn solve_part_1(input:&[((i32,i32),(i32,i32))], row:i32) -> i32 {
     sum
 }
 
-fn impossible_ranges(input:&[((i32,i32),(i32,i32))], row:i32, bound:Option<i32>) -> Vec<(i32, i32)> {
+fn impossible_ranges(input:&[((i64,i64),(i64,i64))], row:i64, bound:Option<i64>) -> Vec<(i64, i64)> {
     let mut ranges = vec![];
     for (sensor, beacon) in input {
         let x_dist = (beacon.0 - sensor.0).abs();
@@ -75,7 +75,7 @@ fn impossible_ranges(input:&[((i32,i32),(i32,i32))], row:i32, bound:Option<i32>)
     return coalesed;
 }
 
-fn coalesce(ranges:Vec<(i32,i32)>) -> Vec<(i32,i32)> {
+fn coalesce(ranges:Vec<(i64,i64)>) -> Vec<(i64,i64)> {
     let mut coalesced = vec![];
     let mut current_start = ranges[0].0;
     let mut current_end = ranges[0].1;
@@ -94,16 +94,16 @@ fn coalesce(ranges:Vec<(i32,i32)>) -> Vec<(i32,i32)> {
     coalesced
 }
 
-pub fn run_part_2() -> i32 {
+pub fn run_part_2() -> i64 {
     solve_part_2(&INPUT, 4000000)
 }
 
-fn solve_part_2(input:&[((i32,i32),(i32,i32))], bound:i32) -> i32 {
+fn solve_part_2(input:&[((i64,i64),(i64,i64))], bound:i64) -> i64 {
     let (x, y) = find_beacon(input, bound).unwrap();
     (x*4000000) + y
 }
 
-fn find_beacon(input:&[((i32,i32),(i32,i32))], bound:i32) -> Option<(i32, i32)> {
+fn find_beacon(input:&[((i64,i64),(i64,i64))], bound:i64) -> Option<(i64, i64)> {
     let mut beacons = HashSet::new();
     for (_, beacon) in input {
         beacons.insert(beacon);
@@ -135,7 +135,7 @@ fn find_beacon(input:&[((i32,i32),(i32,i32))], bound:i32) -> Option<(i32, i32)> 
     None
 }
 
-fn negate(ranges:Vec<(i32, i32)>, bound:i32) -> Vec<(i32, i32)> {
+fn negate(ranges:Vec<(i64, i64)>, bound:i64) -> Vec<(i64, i64)> {
     let mut results = vec![];
     if ranges[0].0 > 0 {
         results.push((0, ranges[0].0-1));
@@ -156,7 +156,7 @@ fn negate(ranges:Vec<(i32, i32)>, bound:i32) -> Vec<(i32, i32)> {
 mod tests {
     use super::*;
 
-    const TEST : [((i32,i32),(i32,i32));14] = [((2, 18), (-2, 15)),
+    const TEST : [((i64,i64),(i64,i64));14] = [((2, 18), (-2, 15)),
 ((9, 16), (10, 16)),
 ((13, 2), (15, 3)),
 ((12, 14), (10, 16)),
