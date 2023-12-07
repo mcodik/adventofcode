@@ -19,7 +19,7 @@ type Maps =
   | "humidity_to_location";
 
 export function project(n: number, m: Mapping): number | null {
-  if (n < m.src_start || n > m.src_start + m.length) {
+  if (n < m.src_start || n >= m.src_start + m.length) {
     return null;
   }
   return (n - m.src_start) + m.dest_start;
@@ -91,8 +91,30 @@ export function part_1(lines: string[]): number {
 }
 
 export function part_2(lines: string[]): number {
-  let sum = 0;
-  return sum;
+  const almanac = parse(lines);
+  let min = -1;
+  for (let i = 0; i < almanac.seeds.length-1; i += 2) {
+    const start_seed = almanac.seeds[i];
+    const len = almanac.seeds[i+1];
+    console.log("interval: ", start_seed, len);
+    for (let j = 0; j < len; j++) {
+      if (j % 100000000 == 0) {
+        console.log("offset:", j, len);
+      }
+      const seed = start_seed+j;
+      const p1 = project_many(seed, almanac.m.seed_to_soil);
+      const p2 = project_many(p1, almanac.m.soil_to_fertilizer);
+      const p3 = project_many(p2, almanac.m.fertilizer_to_water);
+      const p4 = project_many(p3, almanac.m.water_to_light);
+      const p5 = project_many(p4, almanac.m.light_to_temperature);
+      const p6 = project_many(p5, almanac.m.temperature_to_humidity);
+      const p7 = project_many(p6, almanac.m.humidity_to_location);
+      if (min == -1 || p7 < min) {
+        min = p7;
+      }
+    }
+  }
+  return min;
 }
 
 if (import.meta.main) {
@@ -100,6 +122,6 @@ if (import.meta.main) {
   const lines = text.split("\n").map((l) => l.trim()).filter((l) =>
     l.length > 0
   );
-  console.log("part 1: ", part_1(lines));
+  // console.log("part 1: ", part_1(lines));
   console.log("part 2: ", part_2(lines));
 }

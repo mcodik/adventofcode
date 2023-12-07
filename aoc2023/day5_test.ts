@@ -32,8 +32,7 @@ temperature-to-humidity map:
 
 humidity-to-location map:
 60 56 37
-56 93 4
-  `;
+56 93 4`;
 
 Deno.test("project_many", () => {
   const a = parse(data.split('\n').map((m) => m.trim()));
@@ -51,5 +50,5 @@ Deno.test("part_1", () => {
 
 
 Deno.test("part_2", () => {
-  
+  assertEquals(46, part_2(data.split('\n').map((m) => m.trim())));
 });
