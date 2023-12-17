@@ -1,7 +1,32 @@
 {
   "version": "3",
+  "packages": {
+    "specifiers": {
+      "npm:memoize": "npm:memoize@10.0.0",
+      "npm:memoize-one": "npm:memoize-one@6.0.0"
+    },
+    "npm": {
+      "memoize-one@6.0.0": {
+        "integrity": "sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==",
+        "dependencies": {}
+      },
+      "memoize@10.0.0": {
+        "integrity": "sha512-H6cBLgsi6vMWOcCpvVCdFFnl3kerEXbrYh9q+lY6VXvQSmM6CkmV08VOwT+WE2tzIEqRPFfAq3fm4v/UIW6mSA==",
+        "dependencies": {
+          "mimic-function": "mimic-function@5.0.0"
+        }
+      },
+      "mimic-function@5.0.0": {
+        "integrity": "sha512-RBfQ+9X9DpXdEoK7Bu+KeEU6vFhumEIiXKWECPzRBmDserEq4uR2b/VCm0LwpMSosoq2k+Zuxj/GzOr0Fn6h/g==",
+        "dependencies": {}
+      }
+    }
+  },
   "redirects": {
-    "https://deno.land/x/set_operations/mod.ts": "https://deno.land/x/set_operations@v1.1.1/mod.ts"
+    "https://deno.land/std/testing/asserts.ts": "https://deno.land/std@0.209.0/testing/asserts.ts",
+    "https://deno.land/x/equal/mod.ts": "https://deno.land/x/equal@v1.5.0/mod.ts",
+    "https://deno.land/x/set_operations/mod.ts": "https://deno.land/x/set_operations@v1.1.1/mod.ts",
+    "https://x.nest.land/arithmetic4@0.1.1/mod.ts": "https://qkmhap62qwfaasqzew54nnbu7ar42u43y356rpojsrtm2ravz4uq.arweave.net/gphwP9qFigBKGSW7xrQ0-CPNU5vG--i9yZRmzUQVzyk/mod.ts"
   },
   "remote": {
     "https://deno.land/std@0.208.0/assert/_constants.ts": "8a9da298c26750b28b326b297316cdde860bc237533b07e1337c021379e6b2a9",
