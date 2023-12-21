@@ -9,63 +9,80 @@ export const SAMPLE = `
 ?###???????? 3,2,1
 `
 
-export const mem_solve = memoize(solve);
+export const mem_solve = memoize(solve, {
+  cacheKey: a => a[0].join('') + a[1].join(',')
+});
 
-export function solve(pattern:string[], arrangement:number[]):number {
-  const a = [...arrangement];
-  for (let i = 0; i < pattern.length; i++) {
-    console.log('loop', i, pattern.slice(i).join(''), a.join(','));
-    if (pattern[i] == '.') {
-      if (a[0] == 0) {
-        a.shift();
-      }
-    } else if (pattern[i] == '#') {
-      if (a[0] == 0) {
-        return 0;
-      }
-      const sub = pattern.slice(i, i+a[0]+1);
-      if (sub.length != (a[0]+1)) {
-        return 0;
-      }
+function log_solve(pattern:string[], a:number[]):number {
+  const ret = solve(pattern, a);
+  console.log(`solve '${pattern.join('')}' '${a.join(',')}' = ${ret}`);
+  return ret;
+}
 
-      const last_sub = sub[sub.length-1];
-      if (last_sub == '#') {
-        return 0;
-      }
+export function solve(pattern:string[], a:number[]):number {
+  if (a.length == 0) {
+    return pattern.indexOf('#') < 0 ? 1 : 0;
+  }
 
-      const dot = sub.indexOf('.');
-      if (dot >= 0 && dot != sub.length-1) {
-        return 0;
-      }
 
-      a.shift();
-      return mem_solve(pattern.slice(i+a[0]+1), a);
-    } else if (pattern[i] == '?') {
-      const remaining_pattern = pattern.slice(i+1);
-      let if_match = 0;
-      const log = pattern.length == 12;
-      if (a.length > 0 && a[0] > 0) {
-        const match_pattern = ['#', ...remaining_pattern];        
-        if_match = mem_solve(match_pattern, a);
-        if (log) {
-          console.log('# solve', remaining_pattern.join(''), a.join(','), if_match);
-        }
+  if (pattern.length == 0) {
+    return 0;
+  }
+
+
+  if (pattern.length < a[0]) {
+    return 0;
+  }
+
+  const p = pattern[0];
+  if (p == '.') {
+    for (let i = 1; i < pattern.length; i++) {
+      if (pattern[i] != '.') {
+        const next_pattern = pattern.slice(i, pattern.length);
+        return mem_solve(next_pattern, a);
       }
-      const no_match_pattern = ['.', ...remaining_pattern]; 
-      const no_match = mem_solve(no_match_pattern, a);
-      if (log) {
-        console.log('. solve', no_match_pattern.join(''), a.join(','), no_match);
-      }
-      return if_match + no_match;  
     }
-  }
+    return 0;
+  } else if (p == '#') {
+    if (a.length == 0) {
+      return 0;
+    }
 
-  if (a.length == 0 || (a.length == 1 && a[0] == 0)) {
-    console.log('match', pattern.join(''), arrangement.join(','));
-    return 1;
+    const sub = pattern.slice(0, a[0]);
+    // console.log('consume', pattern.join(''), a[0], '->', sub.join(''));
+    if (sub.length < a[0]) {
+      return 0;
+    }
+
+    const dot = sub.indexOf('.');
+    if (dot >= 0) {
+      return 0;
+    }
+
+    if (pattern.length > a[0]) {
+      const n = pattern[a[0]];
+      if (n == '#') {
+        return 0;
+      }
+    }
+
+    if (pattern.length == a[0] && a.length == 1) {
+      return 1;
+    }
+
+    const next_a = a.slice(1);
+    const next_pattern = pattern.slice(a[0]+1);
+    // console.log("->", next_pattern.join(''), next_a.join(','));
+    return mem_solve(next_pattern, next_a);
+  } else { // p == ?
+    const remaining_pattern = pattern.slice(1);
+    const match_pattern = ['#', ...remaining_pattern];        
+    const if_match = mem_solve(match_pattern, a);
+    
+    const no_match_pattern = ['.', ...remaining_pattern]; 
+    const no_match = mem_solve(no_match_pattern, a);
+    return if_match + no_match;  
   }
-  console.log('no', pattern.join(''), arrangement.join(','));
-  return 0;
 }
 
 export function solve_str(line:string):number {
@@ -83,7 +100,15 @@ export function part_1(lines:string[]): number {
 }
 
 export function part_2(lines:string[]): number {
-  return 0;
+  let sum = 0;
+  lines.forEach((l) => {
+    const [pattern, arrangement_s] = l.split(' ');
+    const expanded_pattern = [pattern, pattern, pattern, pattern, pattern].join('?');
+    const expanded_arrangement = [arrangement_s,arrangement_s,arrangement_s,arrangement_s,arrangement_s].join(',');
+    const arrangement = expanded_arrangement.split(',').map((i) => parseInt(i)); 
+    sum += solve(expanded_pattern.split(''), arrangement);
+  })
+  return sum;
 }
 
 if (import.meta.main) {
